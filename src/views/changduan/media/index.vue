@@ -5,6 +5,7 @@
       v-model="videoSrc"
       placeholder="于此输入音视频网络地址"
       clearable
+      @keyup.enter="playVideoWithWeb"
     >
       <template #append>
         <el-button @click="playVideoWithWeb">播放</el-button>
