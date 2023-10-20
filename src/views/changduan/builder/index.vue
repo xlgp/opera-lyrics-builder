@@ -105,7 +105,7 @@ defineProps({
     }
 });
 
-const playCount = inject(playCountKey);
+const playCount = inject<Ref<number>>(playCountKey, ref(0));
 
 const zimuFormRef = ref();
 const contentRef = ref();
@@ -123,7 +123,7 @@ const {
 
 const rules = useChangDuanRules();
 
-watch(playCount, () => {handlePlay();})
+watch(()=>playCount.value, handlePlay)
 
 onMounted(() => {
     init();
