@@ -1,15 +1,29 @@
 <template>
-  <video ref="videoRef" controls class="video" autoplay></video>
-  <div>
-    <input type="file" id="file" hidden @change="changeHandler" />
-    <el-input v-model="videoSrc" placeholder="于此输入音视频网络地址" clearable>
+  <div :ondrop="dropHandler" :ondragover="(e: Event) => e.preventDefault()">
+    <el-input
+      size="large"
+      v-model="videoSrc"
+      placeholder="于此输入音视频网络地址"
+      clearable
+    >
       <template #append>
         <el-button @click="playVideoWithWeb">播放</el-button>
       </template>
     </el-input>
-    <label class="drag-box" for="file" :ondrop="dropHandler" :ondragover="(e: Event) => e.preventDefault()">
-      <span>点我选择音视频，或拖拽音视频至此</span>
-    </label>
+    <video ref="videoRef" controls class="video" autoplay></video>
+    <div class="btn">
+      <input type="file" id="file" hidden @change="changeHandler" />
+      <label for="file" class="el-button">
+        <span>选择音视频</span>
+      </label>
+      <el-button type="primary" @click="$emit('playCurrent')">当前时间播放</el-button>
+    </div>
+    <el-alert
+      style="margin-top: 10px"
+      title="鼠标放在唱词输入框中有时间所在行，点击当前时间播放按钮"
+      type="warning"
+      show-icon
+    />
   </div>
 </template>
 <script setup lang="ts">
@@ -20,29 +34,22 @@ const videoRef = ref<HTMLMediaElement | undefined>();
 
 const videoSrc = ref<string>("");
 
-const { changeHandler, playVideoWithWeb, dropHandler } = useHandlers(
-  videoRef,
-  videoSrc
-);
+const emit = defineEmits(["playCurrent"]);
+
+const { changeHandler, playVideoWithWeb, dropHandler } = useHandlers(videoRef, videoSrc);
 </script>
 <style lang="css">
-.drag-box {
+.btn {
   display: flex;
-  height: 180px;
-  margin-top: 6px;
-  border: 1px dashed var(--el-color-primary);
-  border-radius: 4px;
-  justify-content: center;
-  align-items: center;
-  color: var(--el-text-color-primary);
-  cursor: pointer;
+  justify-content: space-between;
 }
 
 .video {
   height: 400px;
   width: 100%;
-  background: #ece7f4;
+  background: #1e1e1e;
   border: 1px dashed #120b1d;
   border-radius: 4px;
+  margin: 10px 0;
 }
 </style>
