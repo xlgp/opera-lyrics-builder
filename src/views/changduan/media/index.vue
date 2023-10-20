@@ -21,7 +21,13 @@
     <el-alert
       style="margin-top: 10px"
       title="鼠标放在唱词输入框中有时间所在行，点击当前时间播放按钮"
-      type="warning"
+      type="info"
+      show-icon
+    />
+    <el-alert
+      style="margin-top: 10px"
+      title="拖拽音视频至视频区域可自动播放视频"
+      type="info"
       show-icon
     />
   </div>
