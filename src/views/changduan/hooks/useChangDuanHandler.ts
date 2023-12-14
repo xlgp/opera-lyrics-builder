@@ -1,19 +1,19 @@
 import { FormInstance, ElMessage } from "element-plus";
-import { Ref } from "vue";
+import { Ref, watch } from "vue";
 import { ChangDuanFromType } from "../data/data";
 import { SEPARATOR } from "../data/XiquConstant";
 import { getShowTime, addShowTime, getPastedContent, getLrc } from "./changDuanUtil";
 import useClipboard from "vue-clipboard3";
-import useWebSite from "../hooks/useWebSite";
 
-export default (formData: Ref<ChangDuanFromType>, getTextareaEl: () => HTMLTextAreaElement, storageData: () => void) => {
+export default (formData: Ref<ChangDuanFromType>,
+    currentTime: Ref<number>,
+    getTextareaEl: () => HTMLTextAreaElement,
+    storageData: () => void) => {
 
     const { toClipboard } = useClipboard();
-    const { getCurrentTime, setCurrentTime } = useWebSite();
 
-    const handlePlay = () => {
-        let time = getShowTime(formData.value.content, SEPARATOR, getTextareaEl());
-        time && setCurrentTime(+time);
+    const getCurrentTime = () => {
+        return getShowTime(formData.value.content, SEPARATOR, getTextareaEl());
     };
 
     const resetForm = (formEl: FormInstance | undefined) => {
@@ -22,13 +22,13 @@ export default (formData: Ref<ChangDuanFromType>, getTextareaEl: () => HTMLTextA
         storageData();
     };
 
-    const handleAddTime = () => {
+    watch(currentTime, (value: number) => {
         formData.value.content = addShowTime(
             formData.value.content,
             getTextareaEl(),
-            getCurrentTime() + SEPARATOR
+            value + SEPARATOR
         );
-    };
+    })
 
     const handlePaste = (event: ClipboardEvent) => {
         if (formData.value.content.trim() == "") {
@@ -60,6 +60,6 @@ export default (formData: Ref<ChangDuanFromType>, getTextareaEl: () => HTMLTextA
 
     };
     return {
-        handleAddTime, handleCopy, handlePaste, handlePlay, resetForm
+        handleCopy, handlePaste, getCurrentTime, resetForm
     }
 }

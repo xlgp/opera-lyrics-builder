@@ -3,7 +3,7 @@
     <el-row :gutter="10">
       <el-col :span="14">
         <el-form-item prop="content">
-          <el-button class="add-btn" type="primary" @click="handleAddTime">
+          <el-button class="add-btn" type="primary" @click="addTimeHandler">
             <span>添加时间</span>
           </el-button>
           <el-input
@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, Ref,inject, watch } from "vue";
+import { ref, onMounted, Ref,inject, watch, toRefs } from "vue";
 import useChangDuanRules from "../hooks/useChangDuanRules";
 import useInitChangDuan from "../hooks/useInitChangDuan";
 import useChangDuanHandler from "../hooks/useChangDuanHandler";
@@ -94,7 +94,7 @@ const formData: Ref<ChangDuanFromType> = ref<ChangDuanFromType>({
     by: "戏曲字幕",
 });
 
-defineProps({
+const props = defineProps({
     autosize: {
         type: [Object, Boolean],
         default: { minRows: 15, maxRows: 15 },
@@ -102,8 +102,16 @@ defineProps({
     juZhongs: {
         type: Array<string>,
         default: []
-    }
+    },
+    currentTime:{
+      type:Number,
+      default:0
+    },
 });
+
+const {currentTime} = toRefs(props);
+
+const emit = defineEmits(['getCurrentTime', 'addTime'])
 
 const playCount = inject<Ref<number>>(playCountKey, ref(0));
 
@@ -114,16 +122,18 @@ let textareaEl: HTMLTextAreaElement = (undefined as unknown) as HTMLTextAreaElem
 const { init, storageData } = useInitChangDuan(formData);
 
 const {
-    handleAddTime,
     handleCopy,
     handlePaste,
-    handlePlay,
+    getCurrentTime,
     resetForm,
-} = useChangDuanHandler(formData, () => textareaEl, storageData);
+} = useChangDuanHandler(formData,currentTime, () => textareaEl, storageData);
 
 const rules = useChangDuanRules();
 
-watch(()=>playCount.value, handlePlay)
+const addTimeHandler = ()=>{
+  emit("addTime");
+}
+watch(()=>playCount.value, ()=>emit("getCurrentTime", getCurrentTime()))
 
 onMounted(() => {
     init();
