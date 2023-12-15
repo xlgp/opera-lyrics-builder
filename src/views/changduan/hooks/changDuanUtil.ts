@@ -21,6 +21,7 @@ export const getShowTime = (
     textareaEl: HTMLTextAreaElement
 ) => {
     let selectionEnd = textareaEl.selectionEnd;
+
     let startIndex = value.substring(0, selectionEnd).lastIndexOf("\n") + 1;
 
     let ei = value.substring(selectionEnd, value.length).indexOf("\n");
@@ -30,8 +31,10 @@ export const getShowTime = (
         endIndex = value.length;
     }
     let timeStr = value.substring(startIndex, endIndex);
-    if (timeStr.includes(separator)) {
-        return timeStr.substring(0, timeStr.indexOf(separator));
+
+    let separateIndex = timeStr.indexOf(separator);
+    if (separateIndex > -1) {
+        return timeStr.substring(0, separateIndex);
     }
     return "";
 };
