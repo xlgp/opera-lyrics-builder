@@ -3,7 +3,7 @@
         <el-menu-item index="title">戏曲字幕 唱词制作</el-menu-item>
         <div class="flex-grow" />
         <el-menu-item index="extentions"><a target="_blank" href="https://gitee.com/xlgp/XiquZimuExtensions">插件</a></el-menu-item>
-        <el-menu-item index="oldVersion"><a target="_blank" href="https://xlgp.gitee.io/changci.html">旧版</a></el-menu-item>
+        <el-menu-item index="oldVersion"><a target="_blank" href="https://xlgp.github.io/opera-lyrics-builder/changci.html">旧版</a></el-menu-item>
         <el-menu-item index="gitee"><a target="_blank" href="https://gitee.com/xlgp/opera-lyrics-builder">
                 <img src="https://gitee.com/static/images/logo-en.svg" alt="Gitee" width="30"
                     style="vertical-align: middle;" />
