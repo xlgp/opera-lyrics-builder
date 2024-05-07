@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+    <title>制作唱词 - 心灵的孤僻</title>
+    <!-- Import style -->
+    <link rel="stylesheet" href="./css/changci.css" />
+    <link href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.3.12/index.min.css" rel="stylesheet">
+    <style>
+        .el-textarea.is-disabled .el-textarea__inner {
+            background-color: rgb(18, 18, 18);
+        }
+
+        #startBtn {
+            outline: none;
+            border: none;
+            border-radius: 50%;
+            width: 205px;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            height: 205px;
+            background-color: #409eff;
+            box-shadow: 0px 1px 6px 0px #409eff;
+        }
+
+        header {
+            display: flex;
+            justify-content: center;
+            padding: 17px;
+            background: #dae35c;
+            margin-bottom: 10px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tips {
+            font-size: 0.8em;
+            margin-top: 10px;
+            color: #313131;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="https://xlgp.gitee.io/opera-lyrics-builder/">戏曲字幕 唱词制作（新版）</a>
+        <div class="tips">本版不日将关闭</div>
+    </header>
+    <main>
+        <div id="loading">
+            <div>
+                <div class="loading">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="text">正在加载...</div>
+            </div>
+        </div>
+        <div id="formApp" style="display: none;">
+            <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="80px">
+                <el-row>
+                    <el-col :md="8" :sm="12">
+                        <el-form-item label="剧种" prop="jz">
+                            <el-select v-model="formData.jz" placeholder="请选择剧种" clearable filterable allow-create
+                                default-first-option :style="{width: '100%'}">
+                                <el-option v-for="(item, index) in jzOptions" :key="index" :label="item.label"
+                                    :value="item.value" :disabled="item.disabled"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :md="8" :sm="12">
+                        <el-form-item label="剧目" prop="jm">
+                            <el-input v-model="formData.jm" placeholder="请输入剧目" show-word-limit clearable
+                                :style="{width: '100%'}"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :md="8" :sm="12">
+                        <el-form-item label="时差" prop="offset">
+                            <el-input-number v-model="formData.offset" placeholder="请输入时差" :step='1'>
+                            </el-input-number>
+                            <el-tooltip content="主要用于提前或延后显示唱词，单位：s" placement="bottom">
+                                <i class="el-icon" style="--font-size:20px;cursor: pointer;vertical-align: middle;"><svg
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+                                        <path fill="currentColor"
+                                            d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z">
+                                        </path>
+                                    </svg></i>
+                            </el-tooltip>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :md="12" :sm="12">
+                        <el-form-item label="选段" prop="ti">
+                            <el-input v-model="formData.ti" placeholder="请输入选段" clearable :style="{width: '100%'}">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :md="6" :sm="12">
+                        <el-form-item label="版本" prop="ver">
+                            <el-input v-model="formData.ver" placeholder="请输入版本" clearable :style="{width: '100%'}">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :md="6" :sm="12">
+                        <el-form-item label="关键词" prop="keys">
+                            <el-input v-model="formData.keys" placeholder="请输入关键词" clearable :style="{width: '100%'}">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :xs="24" :sm="12">
+                        <el-form-item label="唱词列表" prop="content" :style="{width: '100%'}">
+                            <el-input v-model="formData.content" type="textarea" ref="content" placeholder="请输入或复制唱词"
+                                @paste="handlePaste" :autosize=" { minRows: 10, maxRows: 25 }" :style="{width: '100%'}">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12">
+                        <el-form-item label="LRC列表" :style="{width: '100%'}">
+                            <el-input v-model="lrc" disabled type="textarea" placeholder="RLC"
+                                :autosize=" { minRows: 10, maxRows: 25 }" :style="{width: '100%'}"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item size="large">
+                            <el-popconfirm title="确定重置吗？不可恢复哦！" @confirm="resetForm">
+                                <template #reference>
+                                    <el-button>重置</el-button>
+                                </template>
+                            </el-popconfirm>
+                            <el-button round @click="start">{{startBtnText}}</el-button>
+                            <label class="el-form-item__label" style="margin: 0 20px;">{{showTime}}</label>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item size="large" label-width="0px">
+                            <el-button type="primary" @click="submitForm">复制LRC</el-button>
+                        </el-form-item>
+                    </el-col>
+                    </el-form-item>
+                </el-row>
+            </el-form>
+            <div style="text-align: center;">
+                <button @click="addShowTime" id="startBtn">添加时间</button>
+            </div>
+            <el-collapse v-model="activeCollapseName">
+                <el-collapse-item name="offset" title="解释时差">
+                    <p>由于直播时有网络延时，一般需要提前发送字幕，时差主要用于提前或延后显示唱词，单位：s</p>
+                    <p>&gt;0 ：表示延后</p>
+                    <p>&lt;0 ：表示提前</p>
+                </el-collapse-item>
+            </el-collapse>
+        </div>
+    </main>
+    <footer>
+        <p style="text-align: center;font-size: small;">
+            感谢<a href="https://www.bootcdn.cn/" target="_blank">BootCDN</a>提供CDN支持。
+        </p>
+    </footer>
+</body>
+<!-- Import Vue 3 -->
+<script src="https://cdn.bootcdn.net/ajax/libs/vue/3.3.4/vue.global.prod.min.js"></script>
+<!-- Import component library -->
+<script src="https://cdn.bootcdn.net/ajax/libs/element-plus/2.3.12/index.full.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+<script src="./js//useClipboard.js"></script>
+<script>
+    let formApp = {
+        components: {},
+        props: [],
+        data() {
+            return {
+                formData: {
+                    jz: "黄梅戏",
+                    jm: '',
+                    offset: -10,
+                    ti: '',
+                    content: "",
+                    result: '',
+                    keys: "",
+                    ver: "",
+                    by: "",
+                },
+                jiShiIntervalID: 0,//记时id
+                currentTime: 0, //当前的时间，long型
+                activeCollapseName: 'offset',
+                rules: {
+                    jz: [{
+                        required: true,
+                        message: '请选择剧种',
+                        trigger: 'change'
+                    }],
+                    jm: [{
+                        required: true,
+                        message: '请输入剧目',
+                        trigger: 'blur'
+                    }],
+                    offset: [{
+                        required: true,
+                        message: '请输入时差',
+                        trigger: 'blur'
+                    }],
+                    ti: [{
+                        required: true,
+                        message: '请输入选段',
+                        trigger: 'blur'
+                    }],
+                    content: [{
+                        required: true,
+                        message: '请输入或复制唱词',
+                        trigger: 'blur'
+                    }],
+                },
+                jzOptions: [{
+                    "label": "黄梅戏",
+                    "value": "黄梅戏"
+                }, {
+                    "label": "越剧",
+                    "value": "越剧"
+                }, {
+                    "label": "京剧",
+                    "value": "京剧"
+                }, {
+                    "label": "歌曲",
+                    "value": "歌曲"
+                }, {
+                    "label": "黄梅歌",
+                    "value": "黄梅歌"
+                }, {
+                    "label": "其他",
+                    "value": "其他"
+                }],
+            }
+        },
+        computed: {
+            lrc() {
+                return [
+                    "[ti:" + (this.formData.ti || "") + "]",
+                    "[oti:" + (this.formData.ti || "") + "]",
+                    "[jz:" + (this.formData.jz || "") + "]",
+                    "[jm:" + (this.formData.jm || "") + "]",
+                    "[ojm:" + (this.formData.jm || "") + "]",
+                    "[ver:" + (this.formData.ver || "") + "]",
+                    "[offset:" + (this.formData.offset || 0) + "]",
+                    "[by:" + (this.formData.by || "") + "]",
+                    "[keys:" + (this.formData.keys || "") + "]",
+                    this.formData.content
+                ].join('\n');
+            },
+            showTime() {
+                return this.getTime(this.currentTime);
+            },
+            startBtnText() {
+                return this.jiShiIntervalID == 0 && '开始计时' || '取消计时';
+            },
+        },
+        watch: {},
+        created() { },
+        mounted() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('formApp').style.display = 'block';
+        },
+        methods: {
+            start() {
+                this.currentTime = 0;
+                window.clearInterval(this.jiShiIntervalID);
+                if (this.jiShiIntervalID == 0) {
+                    this.run();
+                } else {
+                    this.jiShiIntervalID = 0;
+                }
+            },
+            run() {
+                let delay = 11;
+                this.jiShiIntervalID = window.setInterval(() => {
+                    this.currentTime += delay;
+                }, delay);
+            },
+            addShowTime() {
+                let textarea = this.$refs.content.$el.firstElementChild;
+                let i = this.formData.content.substring(0, textarea.selectionEnd).lastIndexOf('\n') + 1;
+                textarea.setRangeText("[" + this.showTime + "]", i, i);
+                this.formData.content = textarea.value;
+                let j = this.formData.content.substring(i + 1).indexOf('\n') + i;
+                textarea.focus();
+                textarea.setSelectionRange(j + 2, j + 2);
+            },
+            getTime(time) {
+                let minute = parseInt(time / 60000);
+                let second = parseInt((time % 60000) / 1000);
+                let millis = time % 1000;
+                return (minute < 10 && "0" + minute || minute) + ":" + (second < 10 && "0" + second || second) + "." + (millis < 10 && "0" + millis || millis);
+            },
+            handlePaste(event) {
+                if (this.formData.content.trim() == '') {
+                    let paste = (event.clipboardData || window.clipboardData).getData('text');
+                    if (paste && paste.trim()) {
+                        let list = paste.split('\n').filter(value => value.trim());
+                        let time = 7 * 1000;
+                        for (let i = 0; i < list.length; i++) {
+                            const element = list[i];
+                            list[i] = '[' + this.getTime(time * (i + 1)) + ']' + list[i];
+                        }
+                        this.formData.content = list.join('\n');
+                    }
+                    event.preventDefault();
+                }
+            },
+            async copy() {
+                try {
+                    await useClipboard().toClipboard(this.lrc);
+                    ElementPlus.ElMessage({
+                        message: '复制成功',
+                        type: 'success',
+                    })
+                } catch (e) {
+                    console.error(e);
+                    ElementPlus.ElMessage({
+                        message: '复制失败' + e.message,
+                        type: 'error',
+                    })
+                }
+            },
+            submitForm() {
+                this.$refs['elForm'].validate(valid => {
+                    if (!valid) return;
+                    this.copy();
+                })
+            },
+            resetForm() {
+                this.$refs['elForm'].resetFields()
+            }
+        }
+    }
+    Vue.createApp(formApp).use(ElementPlus).mount('#formApp');
+</script>
+
+</html>
