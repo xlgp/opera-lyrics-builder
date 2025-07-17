@@ -1,6 +1,6 @@
 <template>
     <el-menu :default-active="activeIndex" mode="horizontal" :ellipsis="false" @select="handleSelect">
-        <el-menu-item index="title">戏曲字幕 唱词制作</el-menu-item>
+        <el-menu-item index="title">戏曲字幕 唱词制作<small>({{ version }})</small></el-menu-item>
         <div class="flex-grow" />
         <el-menu-item index="guide"><guide-viewer/></el-menu-item>
         <el-menu-item index="extentions"><a target="_blank" href="https://gitee.com/xlgp/XiquZimuExtensions">插件</a></el-menu-item>
@@ -19,10 +19,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-const activeIndex = ref('title')
+const version = __APP_VERSION__;
 </script>
   
-<style>
+<style scoped>
 .flex-grow {
     flex-grow: 1;
 }
@@ -31,5 +31,7 @@ const activeIndex = ref('title')
     font-size: 1.5em;
     color: var(--el-color-primary-light-9);
 }
+
+small {margin-left: 10px;}
 </style>
   

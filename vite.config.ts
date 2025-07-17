@@ -17,6 +17,9 @@ export default defineConfig({
       dts: true,
       dirs: ['src/components', 'src/views'],
       resolvers: [
-          ElementPlusResolver()]
-  }),]
+        ElementPlusResolver()]
+    })],
+  define: {
+    '__APP_VERSION__': JSON.stringify(process.env.npm_package_version)
+  }
 })
