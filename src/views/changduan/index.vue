@@ -4,13 +4,8 @@
       <Media @play-current="playCurrent" />
     </el-col>
     <el-col :span="16">
-      <Builder
-        :juZhongs="JUZHONGLIST"
-        :autosize="autosize"
-        :currentTime="currentTime"
-        @add-time="addTimeHandler"
-        @get-current-time="handleGetCurrentTime"
-      />
+      <Builder :juZhongs="JUZHONGLIST" :autosize="autosize" :currentTime="currentTime" @add-time="addTimeHandler"
+        @get-current-time="handleGetCurrentTime" />
     </el-col>
   </el-row>
 </template>
@@ -20,6 +15,9 @@ import { ref, provide } from "vue";
 import { JUZHONGLIST } from "./data/XiquConstant";
 import { playCountKey } from "./data/injectionSymbols";
 import useWebSite, { setCurrentWebSite } from "./hooks/useWebSite";
+import useElmessage from "./hooks/useElmessage";
+
+useElmessage();
 
 setCurrentWebSite();
 
