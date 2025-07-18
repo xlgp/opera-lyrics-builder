@@ -59,7 +59,7 @@ export const num2str = (num: number, hasHour: boolean | undefined) => {
     );
 };
 
-export const getLrc = (formData: ChangDuanFromType) => {
+export const generateLrc = (formData: ChangDuanFromType) => {
     let list = [];
 
     list.push("[ti:" + (formData.title || "") + "]");

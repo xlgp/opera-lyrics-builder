@@ -2,7 +2,7 @@ import { FormInstance } from "element-plus";
 import { Ref, watch } from "vue";
 import { ChangDuanFromType } from "../data/data";
 import { SEPARATOR } from "../data/XiquConstant";
-import { getShowTime, addShowTime, getPastedContent, getLrc } from "./changDuanUtil";
+import { getShowTime, addShowTime, getPastedContent, generateLrc } from "./changDuanUtil";
 import useClipboard from "vue-clipboard3";
 
 export default (formData: Ref<ChangDuanFromType>,
@@ -44,7 +44,7 @@ export default (formData: Ref<ChangDuanFromType>,
         await formEl.validate(async (valid) => {
             if (valid) {
                 try {
-                    await toClipboard(getLrc(formData.value));
+                    await toClipboard(generateLrc(formData.value));
                     ElMessage({
                         message: "已复制",
                         type: "success",
