@@ -37,29 +37,42 @@ export default (formData: Ref<ChangDuanFromType>,
         }
     };
 
-    const handleCopy = async (formEl: FormInstance | undefined) => {
+    const validateAndGenerateLrc = async (formEl: FormInstance | undefined) => {
         if (!formEl) {
-            return;
+            throw new Error("不存在表单对象");
         }
-        await formEl.validate(async (valid) => {
-            if (valid) {
-                try {
-                    await toClipboard(generateLrc(formData.value));
-                    ElMessage({
-                        message: "已复制",
-                        type: "success",
-                    });
-                } catch (e: any) {
-                    console.error(e);
-                    ElMessage.error("复制出错了, " + e.message);
-                }
-            } else {
-                ElMessage.error("唱段校验出错");
-            }
-        })
+        const valid = await formEl.validate(() => { });
+        if (!valid) {
+            throw new Error("唱段校验出错");
+        }
+        return generateLrc(formData.value);
+    }
 
+    const handleCopy = async (formEl: FormInstance | undefined) => {
+
+        try {
+            const lrc = await validateAndGenerateLrc(formEl);
+            await toClipboard(lrc);
+            ElMessage({
+                message: "已复制",
+                type: "success",
+            });
+        } catch (e: any) {
+            console.error(e);
+            ElMessage.error("复制出错了\n" + e.message);
+        }
     };
+
+    const handlePreviewLrc = async (formEl: FormInstance | undefined) => {
+        try {
+            return await validateAndGenerateLrc(formEl);
+        } catch (e: any) {
+            console.error(e);
+            ElMessage.error("复制出错了\n" + e.message);
+        }
+    }
     return {
-        handleCopy, handlePaste, getCurrentTime, resetForm
+        handleCopy, handlePaste, getCurrentTime, resetForm,
+        handlePreviewLrc
     }
 }

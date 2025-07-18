@@ -13,6 +13,7 @@ declare module 'vue' {
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElContainer: typeof import('element-plus/es')['ElContainer']
+    ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElHeader: typeof import('element-plus/es')['ElHeader']
@@ -30,6 +31,7 @@ declare module 'vue' {
     ElSelect: typeof import('element-plus/es')['ElSelect']
     GuideViewer: typeof import('./src/components/guideViewer.vue')['default']
     HeaderMenu: typeof import('./src/components/HeaderMenu.vue')['default']
+    LrcViewer: typeof import('./src/views/changduan/builder/lrcViewer.vue')['default']
     Media: typeof import('./src/views/changduan/media/index.vue')['default']
   }
 }
