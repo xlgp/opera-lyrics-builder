@@ -1,6 +1,6 @@
 import { FormInstance } from "element-plus";
 import { Ref, watch } from "vue";
-import { ChangDuanFromType, LrcViewPropsType } from "../data/data";
+import { ChangDuanFromType } from "../data/data";
 import { SEPARATOR } from "../data/XiquConstant";
 import { getShowTime, addShowTime, getPastedContent, generateLrc } from "./changDuanUtil";
 import useClipboard from "vue-clipboard3";
