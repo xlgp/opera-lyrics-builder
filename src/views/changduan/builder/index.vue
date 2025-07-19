@@ -36,13 +36,13 @@
         <el-form-item label="关键词" prop="searchKeys">
           <el-input v-model="formData.searchKeys" placeholder="关键词以逗号隔开"></el-input>
         </el-form-item>
-        <el-button plain type="primary" @click="handleCopy(zimuFormRef)">生成并复制字幕</el-button>
+        <el-button type="primary" @click="handleCopy(zimuFormRef)">生成并复制字幕</el-button>
+        <el-button plain type="primary" @click="handlePreviewLrc(zimuFormRef)">预览字幕</el-button>
         <el-popconfirm title="重置唱段内容吗？" @confirm="resetForm(zimuFormRef)">
           <template #reference>
             <el-button>重置</el-button>
           </template>
         </el-popconfirm>
-        <el-button plain type="primary" @click="handlePreviewLrc(zimuFormRef)">预览字幕</el-button>
         <lrc-viewer :object="lrcViewProps" />
       </el-col>
     </el-row>
