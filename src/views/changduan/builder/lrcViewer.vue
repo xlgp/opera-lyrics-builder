@@ -1,20 +1,27 @@
 <template>
-    <el-drawer v-model="drawer" title="Lrc格式" :direction="direction" size="45%">
-        <pre><code>{{ lrc }}</code></pre>
+    <el-drawer v-model="object.show" title="Lrc格式" direction="ltr" size="45%">
+        <pre><code>{{ object.content }}</code></pre>
     </el-drawer>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { toRefs } from 'vue';
 
-const drawer = ref(false);
-const direction = "ltr";
+const props = defineProps({
+    object: {
+        type: Object,
+        default: {
+            show: { type: Boolean, default: false },
+            content: { type: String, default: "" }
+        }
+    }
+});
 
-const lrc = ref("");
+const { object } = toRefs(props);
 
 </script>
 <style lang="css" scoped>
 pre {
-    padding: 1em 1em 0 1em;
+    padding: 1em;
     background-color: #1a1a1a;
     color: #f8fcff;
     border-radius: 4px;

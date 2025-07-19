@@ -42,8 +42,8 @@
             <el-button>重置</el-button>
           </template>
         </el-popconfirm>
-        <el-button plain type="primary" @click="handlePreviewLrc">预览字幕</el-button>
-        <lrc-viewer />
+        <el-button plain type="primary" @click="handlePreviewLrc(zimuFormRef)">预览字幕</el-button>
+        <lrc-viewer :object="lrcViewProps" />
       </el-col>
     </el-row>
   </el-form>
@@ -56,6 +56,7 @@ import useInitChangDuan from "../hooks/useInitChangDuan";
 import useChangDuanHandler from "../hooks/useChangDuanHandler";
 import { ChangDuanFromType } from "../data/data.d";
 import { playCountKey } from "../data/injectionSymbols";
+import { FormInstance } from "element-plus";
 
 const formData: Ref<ChangDuanFromType> = ref<ChangDuanFromType>({
   juZhong: "",
@@ -93,6 +94,11 @@ const zimuFormRef = ref();
 const contentRef = ref();
 let textareaEl: HTMLTextAreaElement = (undefined as unknown) as HTMLTextAreaElement;
 
+const lrcViewProps = ref({
+  show: false,
+  content: ""
+});
+
 const { init, storageData } = useInitChangDuan(formData);
 
 const {
@@ -100,8 +106,20 @@ const {
   handlePaste,
   getCurrentTime,
   resetForm,
-  handlePreviewLrc
+  validateAndGenerateLrc
 } = useChangDuanHandler(formData, currentTime, () => textareaEl, storageData);
+
+const handlePreviewLrc = async (formEl: FormInstance | undefined) => {
+  const props = { show: false, content: "" };
+  try {
+    props.content = await validateAndGenerateLrc(formEl);
+    props.show = true;
+  } catch (e: any) {
+    console.error(e);
+    ElMessage.error("预览出错了\n" + e.message);
+  }
+  lrcViewProps.value = props;
+}
 
 const rules = useChangDuanRules();
 
